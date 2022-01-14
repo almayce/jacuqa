@@ -1,0 +1,8 @@
+build/
+out/
+.idea
+.git
+.gradle
+!/.gitignore
+.xml
+.txt

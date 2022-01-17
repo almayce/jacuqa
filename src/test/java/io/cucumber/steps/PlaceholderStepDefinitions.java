@@ -3,6 +3,7 @@ package io.cucumber.steps;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.storage.GlobalStorage;
+import io.cucumber.table_type.DataPlaceholder;
 import io.cucumber.table_type.DatabaseCellPlaceholder;
 import io.cucumber.table_type.JsonDataPlaceholder;
 import io.cucumber.table_type.JsonDataRandomPlaceholder;
@@ -18,9 +19,9 @@ public class PlaceholderStepDefinitions {
     private PropertyUtils propertyUtils = new PropertyUtils();
 
     @Given("data")
-    public void placeholders(List<JsonDataPlaceholder> jsonDataPlaceholders) {
-        for (JsonDataPlaceholder jsonDataPlaceholder : jsonDataPlaceholders) {
-            GlobalStorage.getStringStorage().put(jsonDataPlaceholder.getPlaceholder(), jsonDataPlaceholder.getPath());
+    public void data(List<DataPlaceholder> jsonDataPlaceholders) {
+        for (DataPlaceholder jsonDataPlaceholder : jsonDataPlaceholders) {
+            GlobalStorage.getStringStorage().put(jsonDataPlaceholder.getPlaceholder(), jsonDataPlaceholder.getValue());
         }
     }
 

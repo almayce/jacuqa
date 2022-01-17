@@ -1,5 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: 
 Class-Path: jsoup-1.14.2.jar accessors-smart-2.4.7.jar rest-assured-comm
  on-4.4.0.jar httpclient5-5.1.jar jep-4.0.0.jar allure-cucumber6-jvm-2.1
  6.1.jar tagsoup-1.2.1.jar ojdbc8-19.3.0.0.jar selenide-5.25.0.jar asser

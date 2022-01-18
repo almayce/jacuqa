@@ -32,10 +32,12 @@ public class RestUtils {
 
     public void defaultAuth() {
         RestAssured.authentication = RestAssured.DEFAULT_AUTH;
+        log.info("Default Auth");
     }
 
     public void initAuthentication(String login, String pass) {
-        RestAssured.authentication = RestAssured.preemptive().basic(login, pass);
+        requestSpecification.auth().preemptive().basic(login, pass);
+        log.info("Basic Auth");
     }
 
     public void initSSLConfig() {

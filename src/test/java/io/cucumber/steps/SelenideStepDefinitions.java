@@ -77,7 +77,7 @@ public class SelenideStepDefinitions {
         Selenide.dismiss();
     }
 
-    @And("switch to window {int} index")
+    @And("switch to window {int}")
     public void switch_to_window(int index) {
         Selenide.switchTo().window(index);
     }

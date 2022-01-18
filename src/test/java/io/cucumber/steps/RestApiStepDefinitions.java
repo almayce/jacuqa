@@ -34,12 +34,11 @@ public class RestApiStepDefinitions {
     @Given("API environment {string}")
     public void api_env(String name) {
         init(name);
-        restUtils.defaultAuth();
+        restUtils.initBaseUrl(baseUrl);
         restUtils.initRequestSpecification(true);
         if (!login.isEmpty() && !pass.isEmpty()) {
             restUtils.initAuthentication(login, pass);
-        }
-        restUtils.initBaseUrl(baseUrl);
+        } else restUtils.defaultAuth();
     }
 
     @Given("headers")

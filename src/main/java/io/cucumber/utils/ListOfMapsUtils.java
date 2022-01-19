@@ -3,6 +3,7 @@ package io.cucumber.utils;
 import org.apache.log4j.Logger;
 import org.assertj.core.api.Assertions;
 import org.junit.ComparisonFailure;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ListOfMapsUtils {
         log.info("column: " + columnName + ", expected: " + expected + ", actual: " + actual + ", row: " + row);
         try {
             Assertions.assertThat(actual).isEqualTo(expected);
-        } catch (ComparisonFailure e) {
+        } catch (AssertionFailedError e) {
             bigDecimalUtils.assertEquals(columnName, actual, columnName, expected);
         }
     }

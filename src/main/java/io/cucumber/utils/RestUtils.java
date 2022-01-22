@@ -1,5 +1,6 @@
 package io.cucumber.utils;
 
+import io.cucumber.core.exception.CucumberException;
 import io.cucumber.table_type.Cookie;
 import io.cucumber.table_type.Header;
 import io.cucumber.table_type.JsonAttribute;
@@ -19,6 +20,9 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.security.*;
 import java.util.List;
+
+import static io.cucumber.utils.AllureUtils.attachResponse;
+import static io.cucumber.utils.AllureUtils.attachText;
 
 public class RestUtils {
 
@@ -75,18 +79,19 @@ public class RestUtils {
     }
 
     public void httpRequest(String protocol, String method, String endpointPath) {
+        if (requestSpecification == null) {
+            throw new CucumberException("Init API environment before each request!");
+        }
+        String absoluteUrl = RestAssured.baseURI + endpointPath;
+        attachText("Absolute URL", absoluteUrl);
         response = requestSpecification
-                .request(method, RestAssured.baseURI + endpointPath);
+                .request(method, absoluteUrl);
         attachResponse(response);
+        requestSpecification = null;
     }
 
     public Response getLastResponse() {
         return response;
-    }
-
-    @Attachment(fileExtension = "json", type = "text/json", value = "RestJsonResponse")
-    public String attachResponse(Response strResponse) {
-        return strResponse.asString();
     }
 
     public void relaxHTTPSValidation() {

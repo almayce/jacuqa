@@ -1,1 +1,1 @@
-# xray-cucumber
+# restassured + selenide + mysql + cucumber implementation

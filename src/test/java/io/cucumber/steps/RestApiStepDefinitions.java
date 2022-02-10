@@ -95,7 +95,7 @@ public class RestApiStepDefinitions {
     }
 
     @And("compare data")
-    public void compare_data(List<JsonData> jsonDataList) {
+    public void compare_data(List<Data> jsonDataList) {
         jsonUtils.compareData(jsonDataList);
     }
 

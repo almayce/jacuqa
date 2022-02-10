@@ -54,6 +54,7 @@ public class RestUtils {
 
     public void initRequestSpecification(boolean logsEnabled) {
         requestSpecification = RestAssured.given();
+        setDefaultContentType();
         if (logsEnabled) {
             requestSpecification
                     .filter(new RequestLoggingFilter())
@@ -61,8 +62,12 @@ public class RestUtils {
         }
     }
 
-    public void initHeaders(List<Header> headers) {
+    private void setDefaultContentType() {
         requestSpecification.contentType("application/json; charset=utf-8");
+    }
+
+    public void initHeaders(List<Header> headers) {
+
         for (Header header : headers) {
             requestSpecification.header(header.getHeader(), stringUtils.setPlaceholders(header.getValue()));
         }

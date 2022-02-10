@@ -2,6 +2,7 @@ package io.cucumber.utils;
 
 import com.github.wnameless.json.unflattener.JsonUnflattener;
 import io.cucumber.storage.GlobalStorage;
+import io.cucumber.table_type.Data;
 import io.cucumber.table_type.JsonAttribute;
 import io.cucumber.table_type.JsonData;
 import io.cucumber.table_type.JsonDataPlaceholder;
@@ -86,53 +87,61 @@ public class JsonUtils {
         JSONObject leftJson = new JSONObject(left);
         JSONObject rightJson = new JSONObject(right);
         for (JsonData jsonData : jsonDataList) {
-            String leftJsonPointer = generateJsonPointer(jsonData.getLeft().toString());
-            String rightJsonPointer = generateJsonPointer(jsonData.getRight().toString());
+            String leftJsonPointer = generateJsonPointer(jsonData.getLeftPath().toString());
+            String rightJsonPointer = generateJsonPointer(jsonData.getRightPath().toString());
             Object expected = leftJson.query(leftJsonPointer);
             String expectedString = stringUtils.setPlaceholders(expected.toString());
             Object actual = rightJson.query(rightJsonPointer);
             String actualString = stringUtils.setPlaceholders(actual.toString());
             String type = jsonData.getType();
-            String message = jsonData.getLeft() + " expected: " + expectedString + ", " +
-                    jsonData.getRight() + " actual: " + actualString;
+            String message = jsonData.getLeftPath() + " expected: " + expectedString + ", " +
+                    jsonData.getRightPath() + " actual: " + actualString;
             log.info(message);
-            Allure.addAttachment(jsonData.getLeft() + " == " + jsonData.getRight(), message);
+            Allure.addAttachment(jsonData.getLeftPath() + " == " + jsonData.getRightPath(), message);
             if (Objects.equals(type, "number")) {
-                bigDecimalUtils.assertEquals(jsonData.getLeft().toString(), expectedString, jsonData.getRight().toString(), actualString);
+                bigDecimalUtils.assertEquals(jsonData.getLeftPath().toString(), expectedString, jsonData.getRightPath().toString(), actualString);
             } else {
                 Assertions
                         .assertThat(actualString)
-                        .withFailMessage(() -> jsonData.getLeft() + " expected: " + expectedString + ", " +
-                                jsonData.getRight() + " actual: " + actualString)
+                        .withFailMessage(() -> jsonData.getLeftPath() + " expected: " + expectedString + ", " +
+                                jsonData.getRightPath() + " actual: " + actualString)
                         .isEqualTo(expectedString);
             }
         }
     }
 
-    public void compareData(List<JsonData> jsonDataList) {
-        for (JsonData jsonData : jsonDataList) {
-            Object left = jsonData.getLeft();
-            Object right = jsonData.getRight();
-            String leftString = stringUtils.setPlaceholders(left.toString());
-            String rightString = stringUtils.setPlaceholders(right.toString());
-            String type = jsonData.getType();
-            String message = jsonData.getLeft() + " expected: " + leftString + ", " +
-                    jsonData.getRight() + " actual: " + rightString;
+    public void compareData(List<Data> dataList) { //todo string utils?
+        for (Data data : dataList) {
+            Object left = data.getLeft();
+            Object right = data.getRight();
+            String leftString, rightString;
+            try {
+                leftString = stringUtils.setPlaceholders(left.toString());
+            } catch (NullPointerException e) {
+                leftString = "";
+            }
+            try {
+                rightString = stringUtils.setPlaceholders(right.toString());
+            } catch (NullPointerException e) {
+                rightString = "";
+            }
+            String type = data.getType();
+            String message = "left: " + leftString + ", right: " + rightString + ", type: " + type;
             log.info(message);
-            Allure.addAttachment(jsonData.getLeft() + " == " + jsonData.getRight(), message);
+            Allure.addAttachment(data.getLeft() + " == " + data.getRight(), message);
             if (Objects.equals(type, "number")) {
-                bigDecimalUtils.assertEquals(jsonData.getLeft().toString(), leftString, jsonData.getRight().toString(), rightString);
+                bigDecimalUtils.assertEquals(data.getLeft().toString(), leftString, data.getRight().toString(), rightString);
             } else if (Objects.equals(type, "datetime")) {
                 try {
-                    Date leftDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(leftString);
+                    Date leftDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(leftString); //todo
                     Date rightDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rightString);
                     Assertions
                             .assertThat(leftDate.compareTo(rightDate) == (0))
-                            .withFailMessage(() -> jsonData.getLeft() + " left: " + leftDate + ", " +
-                                    jsonData.getRight() + " right: " + rightDate)
+                            .withFailMessage(() -> data.getLeft() + " left: " + leftDate + ", " +
+                                    data.getRight() + " right: " + rightDate)
                             .isEqualTo(true);
                 } catch (Exception e) {
-                    // throw new Exception("Failed to parse Date");
+                    throw new AssertionError("Failed to parse DateTime");
                 }
             } else if (Objects.equals(type, "date")) {
                 try {
@@ -140,18 +149,20 @@ public class JsonUtils {
                     Date rightDateTime = new SimpleDateFormat("yyyy-MM-dd").parse(rightString);
                     Assertions
                             .assertThat(leftDateTime.compareTo(rightDateTime) == (0))
-                            .withFailMessage(() -> jsonData.getLeft() + " left: " + leftDateTime + ", " +
-                                    jsonData.getRight() + " right: " + rightDateTime)
+                            .withFailMessage(() -> data.getLeft() + " left: " + leftDateTime + ", " +
+                                    data.getRight() + " right: " + rightDateTime)
                             .isEqualTo(true);
                 } catch (Exception e) {
-                    // throw new Exception("Failed to parse Date");
+                    throw new AssertionError("Failed to parse Date");
                 }
             } else {
+                String leftTemp = leftString;
+                String rightTemp = rightString;
                 Assertions
-                        .assertThat(leftString)
-                        .withFailMessage(() -> jsonData.getLeft() + " left: " + leftString + ", " +
-                                jsonData.getRight() + " right: " + rightString)
-                        .isEqualTo(rightString);
+                        .assertThat(leftTemp)
+                        .withFailMessage(() -> data.getLeft() + " left: " + leftTemp + ", " +
+                                data.getRight() + " right: " + rightTemp)
+                        .isEqualTo(rightTemp);
             }
         }
     }
@@ -234,7 +245,7 @@ public class JsonUtils {
         }
     }
 
-    private String generateJsonPointer(String path) {
+    private String generateJsonPointer(String path) { //todo remove
         String jsonPointer = "/" + path
                 .replace(".", "/")
                 .replace("[", "/")

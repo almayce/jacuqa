@@ -2,30 +2,30 @@ package io.cucumber.table_type;
 
 public class JsonData {
 
-    private Object left;
-    private Object right;
+    private Object leftPath;
+    private Object rightPath;
     private String type;
 
-    public JsonData(Object left, Object right, String type) {
-        this.left = left;
-        this.right = right;
+    public JsonData(Object leftPath, Object rightPath, String type) {
+        this.leftPath = leftPath;
+        this.rightPath = rightPath;
         this.type = type;
     }
 
-    public Object getLeft() {
-        return left;
+    public Object getLeftPath() {
+        return leftPath;
     }
 
-    public void setLeft(Object left) {
-        this.left = left;
+    public void setLeftPath(Object leftPath) {
+        this.leftPath = leftPath;
     }
 
-    public Object getRight() {
-        return right;
+    public Object getRightPath() {
+        return rightPath;
     }
 
-    public void setRight(Object right) {
-        this.right = right;
+    public void setRightPath(Object rightPath) {
+        this.rightPath = rightPath;
     }
 
     public String getType() {

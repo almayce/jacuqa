@@ -21,6 +21,9 @@ public class TableTypeRegistrator implements TypeRegistryConfigurer {
         registry.defineDataTableType(new DataTableType(JsonAttribute.class, (TableEntryTransformer<JsonAttribute>) entry ->
                 new JsonAttribute(entry.get("path"), entry.get("value"), entry.get("type"))));
 
+        registry.defineDataTableType(new DataTableType(Data.class, (TableEntryTransformer<Data>) entry ->
+                new Data(entry.get("left"), entry.get("right"), entry.get("type"))));
+
         registry.defineDataTableType(new DataTableType(JsonData.class, (TableEntryTransformer<JsonData>) entry ->
                 new JsonData(entry.get("left path"), entry.get("right path"), entry.get("type"))));
 

@@ -5,10 +5,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.storage.GlobalStorage;
 import io.cucumber.table_type.DatabaseCell;
+import io.cucumber.table_type.DatabaseCellPlaceholder;
 import io.cucumber.utils.DatabaseUtils;
 import io.cucumber.utils.ListOfMapsUtils;
 import io.cucumber.utils.PropertyUtils;
 import io.cucumber.utils.StringUtils;
+import org.assertj.core.api.Assertions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +62,22 @@ public class DatabaseStepDefinitions {
                 continue;
             }
             listOfMapsUtils.checkResult(response, databaseCell.getColumn(), expectedString, databaseCell.getRow());
+        }
+    }
+
+    @And("define {string} db response data")
+    public void define_db_response_data(String responseName, List<DatabaseCellPlaceholder> databaseCellPlaceholders) {
+        for (DatabaseCellPlaceholder databaseCellPlaceholder : databaseCellPlaceholders) {
+            String column = databaseCellPlaceholder.getColumnName();
+            if (GlobalStorage.getListOfMapsStorage().get(responseName).size() == 0) {
+                Assertions.fail("DB response: '" + responseName + "' is empty! check steps above!");
+            }
+            Object value = GlobalStorage.getListOfMapsStorage()
+                    .get(responseName)
+                    .get(databaseCellPlaceholder.getRowNumber() - 1)
+                    .get(column);
+            String valueString = String.valueOf(value);
+            GlobalStorage.getStringStorage().put(databaseCellPlaceholder.getPlaceholder(), valueString);
         }
     }
 }

@@ -38,4 +38,8 @@ public class FileUtils {
         }
         return fileContent;
     }
+
+    public boolean createNewFile(File file) throws IOException {
+        return file.createNewFile();
+    }
 }

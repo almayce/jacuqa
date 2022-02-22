@@ -1,21 +1,22 @@
 package io.cucumber.steps;
 
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.storage.GlobalStorage;
 import io.cucumber.table_type.DataPlaceholder;
-import io.cucumber.table_type.DatabaseCellPlaceholder;
-import io.cucumber.table_type.JsonDataPlaceholder;
 import io.cucumber.table_type.JsonDataRandomPlaceholder;
+import io.cucumber.utils.FileUtils;
 import io.cucumber.utils.PropertyUtils;
 import io.cucumber.utils.RandomUtils;
-import org.assertj.core.api.Assertions;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 public class PlaceholderStepDefinitions {
 
+    private FileUtils fileUtils = new FileUtils();
     private PropertyUtils propertyUtils = new PropertyUtils();
 
     @Given("data")
@@ -44,19 +45,14 @@ public class PlaceholderStepDefinitions {
         }
     }
 
-    @And("define {string} db response data")
-    public void define_db_response_data(String responseName, List<DatabaseCellPlaceholder> databaseCellPlaceholders) {
-        for (DatabaseCellPlaceholder databaseCellPlaceholder : databaseCellPlaceholders) {
-            String column = databaseCellPlaceholder.getColumnName();
-            if (GlobalStorage.getListOfMapsStorage().get(responseName).size() == 0) {
-                Assertions.fail("DB response: '" + responseName + "' is empty! check steps above!");
-            }
-            Object value = GlobalStorage.getListOfMapsStorage()
-                    .get(responseName)
-                    .get(databaseCellPlaceholder.getRowNumber() - 1)
-                    .get(column);
-            String valueString = String.valueOf(value);
-            GlobalStorage.getStringStorage().put(databaseCellPlaceholder.getPlaceholder(), valueString);
+    @Then("write properties data {string}")
+    public void write_properties_data(String name) {
+        File artifact = new File("src/test/resources/data/" + System.getProperty("env") + "/artifacts/" + name + ".properties");
+        try {
+            fileUtils.createNewFile(artifact);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        propertyUtils.writeProperties(artifact.getAbsolutePath(), GlobalStorage.getStringStorage());
     }
 }

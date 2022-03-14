@@ -36,7 +36,7 @@ public class RestApiStepDefinitions {
         init(name);
         restUtils.initBaseUrl(baseUrl);
         restUtils.initRequestSpecification(true);
-        if (!login.isEmpty() && !pass.isEmpty()) {
+        if (!(login == null) && !login.isEmpty() && !(pass == null) && !pass.isEmpty()) {
             restUtils.initAuthentication(login, pass);
         } else restUtils.defaultAuth();
     }

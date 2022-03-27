@@ -6,8 +6,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.storage.GlobalStorage;
 import io.cucumber.table_type.DatabaseCell;
 import io.cucumber.table_type.DatabaseCellPlaceholder;
+import io.cucumber.utils.AssertionsUtils;
 import io.cucumber.utils.DatabaseUtils;
-import io.cucumber.utils.ListOfMapsUtils;
 import io.cucumber.utils.PropertyUtils;
 import io.cucumber.utils.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -20,7 +20,7 @@ public class DatabaseStepDefinitions {
 
     private StringUtils stringUtils = new StringUtils();
     private PropertyUtils propertyUtils = new PropertyUtils();
-    private ListOfMapsUtils listOfMapsUtils = new ListOfMapsUtils();
+    private AssertionsUtils assertionsUtils = new AssertionsUtils();
     private DatabaseUtils databaseUtils;
     private String driver, url, user, pass, timeout;
 
@@ -58,10 +58,10 @@ public class DatabaseStepDefinitions {
             try {
                 expectedString = stringUtils.setPlaceholders(databaseCell.getValue().toString());
             } catch (NullPointerException npe) {
-                listOfMapsUtils.checkResult(response, databaseCell.getColumn(), "", databaseCell.getRow()); //empty values handling
+                assertionsUtils.checkDatabaseResponse(response, databaseCell.getColumn(), "", databaseCell.getRow()); //empty values handling
                 continue;
             }
-            listOfMapsUtils.checkResult(response, databaseCell.getColumn(), expectedString, databaseCell.getRow());
+            assertionsUtils.checkDatabaseResponse(response, databaseCell.getColumn(), expectedString, databaseCell.getRow());
         }
     }
 

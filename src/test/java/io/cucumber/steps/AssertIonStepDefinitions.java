@@ -189,44 +189,44 @@ public class AssertIonStepDefinitions {
     }
 
     //
-    
+
     @And("assert that {string} contains pattern {string}")
     public void assert_string_contains_pattern(String value, String pattern) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).containsPattern(stringUtils.setPlaceholders(pattern));
     }
-    
+
     @And("assert that {string} does not contain pattern {string}")
     public void assert_string_does_not_contain_pattern(String value, String pattern) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).doesNotContainPattern(stringUtils.setPlaceholders(pattern));
     }
 
     //
-    
+
     @And("assert that {string} has size {int}")
     public void assert_string_has_size(String value, int size) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).hasSize(size);
     }
-    
+
     @And("assert that {string} has size between: {int} and {int}")
     public void assert_string_has_size_between(String value, int start, int end) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).hasSizeBetween(start, end);
     }
-    
+
     @And("assert that {string} has size greater than {int}")
     public void assert_string_has_size_greater_then(String value, int size) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).hasSizeGreaterThan(size);
     }
-    
+
     @And("assert that {string} has size less than {int}")
     public void assert_string_has_size_less_than(String value, int size) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).hasSizeLessThan(size);
     }
-    
+
     @And("assert that {string} has size less than or equal to {int}")
     public void assert_string_has_size_less_than_or_equal_to(String value, int size) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).hasSizeLessThanOrEqualTo(size);
     }
-    
+
     @And("assert that {string} has size greater than or equal to {int}")
     public void assert_string_has_size_greater_than_or_equal_to(String value, int size) {
         Assertions.assertThat(stringUtils.setPlaceholders(value)).hasSizeGreaterThanOrEqualTo(size);

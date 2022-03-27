@@ -9,6 +9,7 @@ import io.cucumber.utils.JsonUtils;
 import io.cucumber.utils.PropertyUtils;
 import io.cucumber.utils.RestUtils;
 import io.cucumber.utils.StringUtils;
+import io.qameta.allure.Allure;
 import org.junit.Assert;
 
 import java.util.List;
@@ -86,27 +87,54 @@ public class RestApiStepDefinitions {
 
     @And("compare {string} and {string} json data")
     public void compare_json_data(String left, String right, List<JsonData> jsonDataList) {
-        jsonUtils.compareJsonData(GlobalStorage.getStringStorage().get(left), GlobalStorage.getStringStorage().get(right), jsonDataList);
+        for (JsonData jsonData : jsonDataList) {
+            String type = jsonData.getType();
+            if (type.equals("date")) {
+                jsonUtils.compareDateJsonData(GlobalStorage.getStringStorage().get(left), GlobalStorage.getStringStorage().get(right), jsonData);
+            } else {
+                jsonUtils.compareJsonData(GlobalStorage.getStringStorage().get(left), GlobalStorage.getStringStorage().get(right), jsonData);
+            }
+        }
+        Allure.addAttachment("Log", GlobalStorage.getAttachment());
     }
 
     @And("compare body and {string} json data")
     public void compare_body_json_data(String right, List<JsonData> jsonDataList) {
-        jsonUtils.compareJsonData(GlobalStorage.getStringStorage().get("body"), GlobalStorage.getStringStorage().get(right), jsonDataList);
+        for (JsonData jsonData : jsonDataList) {
+            String type = jsonData.getType();
+            if (type.equals("date")) {
+                jsonUtils.compareDateJsonData(GlobalStorage.getStringStorage().get("body"), GlobalStorage.getStringStorage().get(right), jsonData);
+            } else {
+                jsonUtils.compareJsonData(GlobalStorage.getStringStorage().get("body"), GlobalStorage.getStringStorage().get(right), jsonData);
+            }
+        }
+        Allure.addAttachment("Log", GlobalStorage.getAttachment());
     }
 
     @And("compare data")
     public void compare_data(List<Data> jsonDataList) {
-        jsonUtils.compareData(jsonDataList);
+        for (Data data : jsonDataList) {
+            jsonUtils.compareData(data);
+        }
+        Allure.addAttachment("Log", GlobalStorage.getAttachment());
     }
 
     @And("check {string} json data")
     public void check_json_data(String requestName, List<JsonAttribute> jsonAttributes) throws Exception {
-        jsonUtils.checkJsonData(GlobalStorage.getStringStorage().get(requestName), jsonAttributes);
+        for (JsonAttribute jsonAttribute : jsonAttributes) {
+            String type = jsonAttribute.getType();
+            if (type.equals("date")) {
+                jsonUtils.assertDateJsonData(GlobalStorage.getStringStorage().get(requestName), jsonAttribute);
+            } else {
+                jsonUtils.assertJsonData(GlobalStorage.getStringStorage().get(requestName), jsonAttribute);
+            }
+        }
+        Allure.addAttachment("Log", GlobalStorage.getAttachment());
     }
 
     @And("define {string} json data")
     public void define_json_data(String jsonName, List<JsonDataPlaceholder> jsonDataPlaceholders) {
-        jsonUtils.storeJsonData(jsonName, jsonDataPlaceholders);
+        jsonUtils.defineJsonData(jsonName, jsonDataPlaceholders);
     }
 
     //todo doc

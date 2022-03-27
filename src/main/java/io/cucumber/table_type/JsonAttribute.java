@@ -3,10 +3,10 @@ package io.cucumber.table_type;
 public class JsonAttribute {
 
     private String path;
-    private Object value;
+    private String value;
     private String type;
 
-    public JsonAttribute(String path, Object value, String type) {
+    public JsonAttribute(String path, String value, String type) {
         this.path = path;
         this.value = value;
         this.type = type;
@@ -20,11 +20,11 @@ public class JsonAttribute {
         this.path = path;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

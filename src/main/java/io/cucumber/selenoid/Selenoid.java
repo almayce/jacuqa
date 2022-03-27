@@ -26,6 +26,13 @@ public class Selenoid implements WebDriverProvider {
     private static String videoUUID = null;
     private static DesiredCapabilities capabilities = null;
 
+    private static String host() {
+        if (System.getProperty("user.name").contains("jenkins"))
+            return System.getProperty("leadium.selenoid.host");
+        else
+            return System.getProperty("leadium.selenoid.localhost");
+    }
+
     @Nonnull
     @Override
     public WebDriver createDriver(DesiredCapabilities desiredCapabilities) {
@@ -65,13 +72,6 @@ public class Selenoid implements WebDriverProvider {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static String host() {
-        if (System.getProperty("user.name").contains("jenkins"))
-            return System.getProperty("leadium.selenoid.host");
-        else
-            return System.getProperty("leadium.selenoid.localhost");
     }
 
     /**

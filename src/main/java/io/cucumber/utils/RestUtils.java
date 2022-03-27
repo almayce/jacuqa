@@ -4,7 +4,7 @@ import io.cucumber.core.exception.CucumberException;
 import io.cucumber.table_type.Cookie;
 import io.cucumber.table_type.Header;
 import io.cucumber.table_type.JsonAttribute;
-import io.qameta.allure.Attachment;
+import io.qameta.allure.Allure;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.config.SSLConfig;
@@ -20,9 +20,6 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.security.*;
 import java.util.List;
-
-import static io.cucumber.utils.AllureUtils.attachResponse;
-import static io.cucumber.utils.AllureUtils.attachText;
 
 public class RestUtils {
 
@@ -88,10 +85,10 @@ public class RestUtils {
             throw new CucumberException("Init API environment before each request!");
         }
         String absoluteUrl = RestAssured.baseURI + endpointPath;
-        attachText("Absolute URL", absoluteUrl);
+        Allure.addAttachment("Absolute URL", absoluteUrl);
         response = requestSpecification
                 .request(method, absoluteUrl);
-        attachResponse(response);
+        Allure.addAttachment("Response", response.prettyPrint());
         requestSpecification = null;
     }
 

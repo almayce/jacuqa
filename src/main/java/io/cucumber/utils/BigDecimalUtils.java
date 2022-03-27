@@ -9,24 +9,31 @@ public class BigDecimalUtils {
 
     Logger log = Logger.getLogger(this.getClass().getSimpleName());
 
-    public boolean isEquals(Object expected, Object actual) {
-        BigDecimal actualDecimal = new BigDecimal(actual.toString());
-        BigDecimal expectedDecimal;
+    public boolean isEquals(String left, String right, String type) {
+        log.info("assertEquals");
+        log.info("left: " + left);
+        log.info("right: " + right);
+        log.info("type: " + type);
+        BigDecimal leftDecimal;
         try {
-            expectedDecimal = new BigDecimal(expected.toString());
+            leftDecimal = new BigDecimal(left);
         } catch (NumberFormatException e) {
-            throw new AssertionError("Is: '" + expected + "' number?");
+            throw new AssertionError("Is: '" + left + "' number?");
         }
-        return actualDecimal.compareTo(expectedDecimal) == (0);
+        BigDecimal rightDecimal = new BigDecimal(right);
+        return leftDecimal.compareTo(rightDecimal) == (0);
     }
 
-    public void assertEquals(String leftKey, String leftValue, String rightKey, String rightValue) {
-        log.info("assertEquality: " + leftKey + " expected: " + leftValue + ", " + rightKey + " actual: " + rightValue);
-        BigDecimal leftDecimal = new BigDecimal(leftValue);
-        BigDecimal rightDecimal = new BigDecimal(rightValue);
+    public void assertEquals(String left, String right, String type) {
+        log.info("assertEquals");
+        log.info("left: " + left);
+        log.info("right: " + right);
+        log.info("type: " + type);
+        BigDecimal leftDecimal = new BigDecimal(left);
+        BigDecimal rightDecimal = new BigDecimal(right);
         Assertions.assertThat(leftDecimal.compareTo(rightDecimal) == (0))
-                .withFailMessage(() -> leftKey + " expected: " + leftDecimal + ", " +
-                        rightKey + " actual: " + rightDecimal)
+                .withFailMessage(() -> "left: " + leftDecimal + ", " +
+                        "right: " + rightDecimal + ", type: " + type)
                 .isEqualTo(true);
     }
 }

@@ -10,6 +10,7 @@ public class GlobalStorage {
     private static HashMap<String, List<HashMap<String, Object>>> listOfMapsStorage = new ListOfMapsStorage<>();
     private static HashMap<String, String> stringStorage = new StringStorage<>();
     private static HashMap<String, Response> responseStorage = new HashMap<>();
+    private static StringBuilder attachmentBuilder = new StringBuilder();
 
     private GlobalStorage() {
         //
@@ -25,5 +26,14 @@ public class GlobalStorage {
 
     public static HashMap<String, List<HashMap<String, Object>>> getListOfMapsStorage() {
         return listOfMapsStorage;
+    }
+
+    public static StringBuilder getAttachmentBuilder() {
+        return attachmentBuilder;
+    }
+    public static String getAttachment() {
+        String attachment = attachmentBuilder.toString();
+        attachmentBuilder.setLength(0);
+        return attachment;
     }
 }
